@@ -58,18 +58,29 @@ typedef struct
 #define GPIOA_BASE (IOPPERIPH_BASE + 0x00000000UL)
 #define GPIOA ((GPIO_TypeDef *)GPIOA_BASE)
 
-#define GPIOB_BASE            (IOPPERIPH_BASE + 0x00000400UL)
-#define GPIOB               ((GPIO_TypeDef *) GPIOB_BASE)
+#define GPIOB_BASE (IOPPERIPH_BASE + 0x00000400UL)
+#define GPIOB ((GPIO_TypeDef *)GPIOB_BASE)
+
+#define GPIO_PIN_13 (1 << 13)
+#define GPIOC_BASE (IOPPERIPH_BASE + 0x00000800UL)
+#define GPIOC ((GPIO_TypeDef *)GPIOC_BASE)
+#define BUTTON_PIN GPIO_PIN_13
+#define BUTTON_PORT GPIOC
 
 #define RCC_IOPENR_IOPAEN_Pos (0U)
 #define RCC_IOPENR_IOPAEN_Msk (0x1UL << RCC_IOPENR_IOPAEN_Pos) /*!< 0x00000001 */
 #define RCC_IOPENR_IOPAEN RCC_IOPENR_IOPAEN_Msk                /*!< GPIO port A clock enable */
 #define RCC_IOPENR_GPIOAEN RCC_IOPENR_IOPAEN                   /*!< GPIO port A clock enable */
 
-#define RCC_IOPENR_IOPBEN_Pos            (1U) 
-#define RCC_IOPENR_IOPBEN_Msk            (0x1UL << RCC_IOPENR_IOPBEN_Pos)       /*!< 0x00000002 */
-#define RCC_IOPENR_IOPBEN                RCC_IOPENR_IOPBEN_Msk                 /*!< GPIO port B clock enable */
-#define RCC_IOPENR_GPIOBEN                  RCC_IOPENR_IOPBEN        /*!< GPIO port B clock enable */
+#define RCC_IOPENR_IOPBEN_Pos (1U)
+#define RCC_IOPENR_IOPBEN_Msk (0x1UL << RCC_IOPENR_IOPBEN_Pos) /*!< 0x00000002 */
+#define RCC_IOPENR_IOPBEN RCC_IOPENR_IOPBEN_Msk                /*!< GPIO port B clock enable */
+#define RCC_IOPENR_GPIOBEN RCC_IOPENR_IOPBEN                   /*!< GPIO port B clock enable */
+
+#define RCC_IOPENR_IOPCEN_Pos (2U)
+#define RCC_IOPENR_IOPCEN_Msk (0x1UL << RCC_IOPENR_IOPCEN_Pos) /*!< 0x00000004 */
+#define RCC_IOPENR_IOPCEN RCC_IOPENR_IOPCEN_Msk                /*!< GPIO port C clock enable */
+#define RCC_IOPENR_GPIOCEN RCC_IOPENR_IOPCEN                   /*!< GPIO port C clock enable */
 
 #define __HAL_RCC_GPIOA_CLK_ENABLE()                        \
     do                                                      \
@@ -81,14 +92,24 @@ typedef struct
         UNUSED(tmpreg);                                     \
     } while (0)
 
-
-#define __HAL_RCC_GPIOB_CLK_ENABLE()   do { \
-                                        __IO uint32_t tmpreg; \
-                                        SET_BIT(RCC->IOPENR, RCC_IOPENR_GPIOBEN);\
-                                        /* Delay after an RCC peripheral clock enabling */ \
-                                        tmpreg = READ_BIT(RCC->IOPENR, RCC_IOPENR_GPIOBEN);\
-                                        UNUSED(tmpreg); \
-                                      } while(0)
+#define __HAL_RCC_GPIOB_CLK_ENABLE()                        \
+    do                                                      \
+    {                                                       \
+        __IO uint32_t tmpreg;                               \
+        SET_BIT(RCC->IOPENR, RCC_IOPENR_GPIOBEN);           \
+        /* Delay after an RCC peripheral clock enabling */  \
+        tmpreg = READ_BIT(RCC->IOPENR, RCC_IOPENR_GPIOBEN); \
+        UNUSED(tmpreg);                                     \
+    } while (0)
+#define __HAL_RCC_GPIOC_CLK_ENABLE()                        \
+    do                                                      \
+    {                                                       \
+        __IO uint32_t tmpreg;                               \
+        SET_BIT(RCC->IOPENR, RCC_IOPENR_GPIOCEN);           \
+        /* Delay after an RCC peripheral clock enabling */  \
+        tmpreg = READ_BIT(RCC->IOPENR, RCC_IOPENR_GPIOCEN); \
+        UNUSED(tmpreg);                                     \
+    } while (0)
 
 void init_gpio()
 {
@@ -99,11 +120,12 @@ void init_gpio()
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOC_CLK_ENABLE();
 
     // Configure GPIO A pin 5 as output.
     GPIOA->MODER = 1 << (5 * 2);   // OUTPUT
-    GPIOA->OTYPER = 0 << (5);      // PUSH PULL
-    GPIOA->OSPEEDR = 0 << (5 * 2); // LOW SPEED
+    GPIOA->OTYPER = 0 << (5);      // PUSH PULL, only used in OUTPUT mode
+    GPIOA->OSPEEDR = 0 << (5 * 2); // LOW SPEED, only used in OUTPUT mode
     GPIOA->ODR = 1 << (5);         // OUTPUT HIGH
 
     // Configure GPIO B pin 3 as output.
@@ -111,6 +133,12 @@ void init_gpio()
     GPIOB->OTYPER = 0 << (3);      // PUSH PULL
     GPIOB->OSPEEDR = 0 << (3 * 2); // LOW SPEED
     GPIOB->ODR = 1 << (3);         // OUTPUT HIGH
+
+    // B1 should be set to 'input' mode with pull-up.
+    GPIOC->MODER &= ~(0x3 << (13 * 2));
+    GPIOC->PUPDR &= ~(0x3 << (13 * 2));
+    GPIOC->PUPDR |= (0x1 << (13 * 2));
+    GPIOC->MODER = 0 << (13 * 2);
 }
 
 void SystemInit(void)
@@ -119,26 +147,47 @@ void SystemInit(void)
 
 int main(void)
 {
+    int toggle = 400000;
+
     init_gpio();
+
+    // Keep track of whether the button is pressed.
+    uint8_t button_down = 0;
+    GPIOA->BRR = 1 << (5);
+    GPIOB->BRR = 1 << (3);
+
     for (;;)
     {
+        uint32_t idr_val = (GPIOC->IDR);
+        if (idr_val & (1 << 13))
+        {
+            // The button is pressed; if it was not already
+            // pressed, fast blink LED.
+            if (!button_down)
+            {
+                toggle = toggle / 2;
+            }
+            button_down = 1;
+        }
+        else
+        {
+            button_down = 0;
+        }
 
-#if 1
         // Set the output bit.
         GPIOA->BSRR = 1 << (5);
         GPIOB->BSRR = 1 << (3);
-        for (uint32_t i = 0; i < 400000; ++i)
+        for (uint32_t i = 0; i < toggle; ++i)
         {
             __asm__ volatile("nop");
         }
         // Reset it again.
         GPIOA->BRR = 1 << (5);
         GPIOB->BRR = 1 << (3);
-        for (uint32_t i = 0; i < 80000; ++i)
+        for (uint32_t i = 0; i < toggle / 2; ++i)
         {
             __asm__ volatile("nop");
         }
 
-#endif
     }
 }
