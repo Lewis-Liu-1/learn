@@ -4,6 +4,7 @@
 #include "main.h"
 
 #define USER_LED_INDEX 3
+#define BUTTON_PIN_INDEX 13
 
 void init_gpio()
 {
@@ -17,7 +18,7 @@ void init_gpio()
     __HAL_RCC_GPIOC_CLK_ENABLE();
 
     // on board led
-    //  Configure GPIO A pin 5 as output.
+    //  Configure GPIO A pin 5 as output.//PA5
     GPIOA->MODER = 1 << (5 * 2);   // OUTPUT
     GPIOA->OTYPER = 0 << (5);      // PUSH PULL, only used in OUTPUT mode
     GPIOA->OSPEEDR = 0 << (5 * 2); // LOW SPEED, only used in OUTPUT mode
@@ -30,7 +31,7 @@ void init_gpio()
     GPIOB->OSPEEDR = 0 << (USER_LED_INDEX * 2); // LOW SPEED
     GPIOB->ODR = 1 << (USER_LED_INDEX);         // OUTPUT HIGH
 
-    // B1 should be set to 'input' mode with pull-up.
+    // B1 should be set to 'input' mode with pull-up. //PC13
     GPIOC->MODER &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
     GPIOC->PUPDR &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
     GPIOC->PUPDR |= (0x1 << (BUTTON_PIN_INDEX * 2));
@@ -55,7 +56,7 @@ void init_exti()
 
     /* EXTI interrupt init*/
     NVIC_SetPriority(EXTI4_15_IRQn, 0x03);
-    NVIC_EnableIRQ(EXTI4_15_IRQn);
+    //NVIC_EnableIRQ(EXTI4_15_IRQn);
 }
 
 void SystemInit(void)

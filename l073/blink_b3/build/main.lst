@@ -1,0 +1,956 @@
+ARM GAS  /tmp/ccOLnb8w.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.init_gpio,"ax",%progbits
+  16              		.align	1
+  17              		.global	init_gpio
+  18              		.arch armv6s-m
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	init_gpio:
+  25              	.LFB2:
+  26              		.file 1 "main.c"
+   1:main.c        **** /* Main program. */
+   2:main.c        **** #include <stdint.h>
+   3:main.c        **** 
+   4:main.c        **** #include "main.h"
+   5:main.c        **** 
+   6:main.c        **** #define USER_LED_INDEX 3
+   7:main.c        **** 
+   8:main.c        **** void init_gpio()
+   9:main.c        **** {
+  27              		.loc 1 9 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 16
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 10B5     		push	{r4, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 4, -8
+  34              		.cfi_offset 14, -4
+  35 0002 84B0     		sub	sp, sp, #16
+  36              		.cfi_def_cfa_offset 24
+  10:main.c        ****     // section 3.3 or table 3 register boundary addresses
+  11:main.c        ****     // RCC 0x40021000
+  12:main.c        ****     // The register that enables the PORTC is the APB2 peripheral clock enable register (or RCC_APB
+  13:main.c        ****     // 8.3.7 APB2 peripheral clock enable register
+  14:main.c        **** 
+  15:main.c        ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+  37              		.loc 1 15 5 view .LVU1
+  38              	.LBB6:
+  39              		.loc 1 15 5 view .LVU2
+  40              		.loc 1 15 5 view .LVU3
+  41 0004 1C4B     		ldr	r3, .L2
+  42 0006 D96A     		ldr	r1, [r3, #44]
+  43 0008 0122     		movs	r2, #1
+ARM GAS  /tmp/ccOLnb8w.s 			page 2
+
+
+  44 000a 1143     		orrs	r1, r2
+  45 000c D962     		str	r1, [r3, #44]
+  46              		.loc 1 15 5 view .LVU4
+  47 000e D96A     		ldr	r1, [r3, #44]
+  48 0010 0A40     		ands	r2, r1
+  49 0012 0192     		str	r2, [sp, #4]
+  50              		.loc 1 15 5 view .LVU5
+  51 0014 019A     		ldr	r2, [sp, #4]
+  52              	.LBE6:
+  53              		.loc 1 15 5 view .LVU6
+  16:main.c        ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+  54              		.loc 1 16 5 view .LVU7
+  55              	.LBB7:
+  56              		.loc 1 16 5 view .LVU8
+  57              		.loc 1 16 5 view .LVU9
+  58 0016 D96A     		ldr	r1, [r3, #44]
+  59 0018 0222     		movs	r2, #2
+  60 001a 1143     		orrs	r1, r2
+  61 001c D962     		str	r1, [r3, #44]
+  62              		.loc 1 16 5 view .LVU10
+  63 001e D96A     		ldr	r1, [r3, #44]
+  64 0020 0A40     		ands	r2, r1
+  65 0022 0292     		str	r2, [sp, #8]
+  66              		.loc 1 16 5 view .LVU11
+  67 0024 029A     		ldr	r2, [sp, #8]
+  68              	.LBE7:
+  69              		.loc 1 16 5 view .LVU12
+  17:main.c        ****     __HAL_RCC_GPIOC_CLK_ENABLE();
+  70              		.loc 1 17 5 view .LVU13
+  71              	.LBB8:
+  72              		.loc 1 17 5 view .LVU14
+  73              		.loc 1 17 5 view .LVU15
+  74 0026 D96A     		ldr	r1, [r3, #44]
+  75 0028 0422     		movs	r2, #4
+  76 002a 1143     		orrs	r1, r2
+  77 002c D962     		str	r1, [r3, #44]
+  78              		.loc 1 17 5 view .LVU16
+  79 002e DB6A     		ldr	r3, [r3, #44]
+  80 0030 1A40     		ands	r2, r3
+  81 0032 0392     		str	r2, [sp, #12]
+  82              		.loc 1 17 5 view .LVU17
+  83 0034 039B     		ldr	r3, [sp, #12]
+  84              	.LBE8:
+  85              		.loc 1 17 5 view .LVU18
+  18:main.c        **** 
+  19:main.c        ****     // on board led
+  20:main.c        ****     //  Configure GPIO A pin 5 as output.
+  21:main.c        ****     GPIOA->MODER = 1 << (5 * 2);   // OUTPUT
+  86              		.loc 1 21 5 view .LVU19
+  87              		.loc 1 21 18 is_stmt 0 view .LVU20
+  88 0036 A023     		movs	r3, #160
+  89 0038 DB05     		lsls	r3, r3, #23
+  90 003a 8022     		movs	r2, #128
+  91 003c D200     		lsls	r2, r2, #3
+  92 003e 1A60     		str	r2, [r3]
+  22:main.c        ****     GPIOA->OTYPER = 0 << (5);      // PUSH PULL, only used in OUTPUT mode
+  93              		.loc 1 22 5 is_stmt 1 view .LVU21
+ARM GAS  /tmp/ccOLnb8w.s 			page 3
+
+
+  94              		.loc 1 22 19 is_stmt 0 view .LVU22
+  95 0040 0022     		movs	r2, #0
+  96 0042 5A60     		str	r2, [r3, #4]
+  23:main.c        ****     GPIOA->OSPEEDR = 0 << (5 * 2); // LOW SPEED, only used in OUTPUT mode
+  97              		.loc 1 23 5 is_stmt 1 view .LVU23
+  98              		.loc 1 23 20 is_stmt 0 view .LVU24
+  99 0044 9A60     		str	r2, [r3, #8]
+  24:main.c        ****     GPIOA->ODR = 1 << (5);         // OUTPUT HIGH
+ 100              		.loc 1 24 5 is_stmt 1 view .LVU25
+ 101              		.loc 1 24 16 is_stmt 0 view .LVU26
+ 102 0046 2021     		movs	r1, #32
+ 103 0048 5961     		str	r1, [r3, #20]
+  25:main.c        **** 
+  26:main.c        ****     // external my led
+  27:main.c        ****     //  Configure GPIO B pin 3 as output.
+  28:main.c        ****     GPIOB->MODER = 1 << (USER_LED_INDEX * 2);   // OUTPUT
+ 104              		.loc 1 28 5 is_stmt 1 view .LVU27
+ 105              		.loc 1 28 18 is_stmt 0 view .LVU28
+ 106 004a 0C4B     		ldr	r3, .L2+4
+ 107 004c 2031     		adds	r1, r1, #32
+ 108 004e 1960     		str	r1, [r3]
+  29:main.c        ****     GPIOB->OTYPER = 0 << (USER_LED_INDEX);      // PUSH PULL
+ 109              		.loc 1 29 5 is_stmt 1 view .LVU29
+ 110              		.loc 1 29 19 is_stmt 0 view .LVU30
+ 111 0050 5A60     		str	r2, [r3, #4]
+  30:main.c        ****     GPIOB->OSPEEDR = 0 << (USER_LED_INDEX * 2); // LOW SPEED
+ 112              		.loc 1 30 5 is_stmt 1 view .LVU31
+ 113              		.loc 1 30 20 is_stmt 0 view .LVU32
+ 114 0052 9A60     		str	r2, [r3, #8]
+  31:main.c        ****     GPIOB->ODR = 1 << (USER_LED_INDEX);         // OUTPUT HIGH
+ 115              		.loc 1 31 5 is_stmt 1 view .LVU33
+ 116              		.loc 1 31 16 is_stmt 0 view .LVU34
+ 117 0054 3839     		subs	r1, r1, #56
+ 118 0056 5961     		str	r1, [r3, #20]
+  32:main.c        **** 
+  33:main.c        ****     // B1 should be set to 'input' mode with pull-up.
+  34:main.c        ****     GPIOC->MODER &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
+ 119              		.loc 1 34 5 is_stmt 1 view .LVU35
+ 120              		.loc 1 34 18 is_stmt 0 view .LVU36
+ 121 0058 094B     		ldr	r3, .L2+8
+ 122 005a 1868     		ldr	r0, [r3]
+ 123 005c 094C     		ldr	r4, .L2+12
+ 124 005e 2040     		ands	r0, r4
+ 125 0060 1860     		str	r0, [r3]
+  35:main.c        ****     GPIOC->PUPDR &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
+ 126              		.loc 1 35 5 is_stmt 1 view .LVU37
+ 127              		.loc 1 35 18 is_stmt 0 view .LVU38
+ 128 0062 D968     		ldr	r1, [r3, #12]
+ 129 0064 2140     		ands	r1, r4
+ 130 0066 D960     		str	r1, [r3, #12]
+  36:main.c        ****     GPIOC->PUPDR |= (0x1 << (BUTTON_PIN_INDEX * 2));
+ 131              		.loc 1 36 5 is_stmt 1 view .LVU39
+ 132              		.loc 1 36 18 is_stmt 0 view .LVU40
+ 133 0068 D868     		ldr	r0, [r3, #12]
+ 134 006a 8021     		movs	r1, #128
+ 135 006c C904     		lsls	r1, r1, #19
+ 136 006e 0143     		orrs	r1, r0
+ARM GAS  /tmp/ccOLnb8w.s 			page 4
+
+
+ 137 0070 D960     		str	r1, [r3, #12]
+  37:main.c        ****     GPIOC->MODER = 0 << (BUTTON_PIN_INDEX * 2);
+ 138              		.loc 1 37 5 is_stmt 1 view .LVU41
+ 139              		.loc 1 37 18 is_stmt 0 view .LVU42
+ 140 0072 1A60     		str	r2, [r3]
+  38:main.c        **** }
+ 141              		.loc 1 38 1 view .LVU43
+ 142 0074 04B0     		add	sp, sp, #16
+ 143              		@ sp needed
+ 144 0076 10BD     		pop	{r4, pc}
+ 145              	.L3:
+ 146              		.align	2
+ 147              	.L2:
+ 148 0078 00100240 		.word	1073876992
+ 149 007c 00040050 		.word	1342178304
+ 150 0080 00080050 		.word	1342179328
+ 151 0084 FFFFFFF3 		.word	-201326593
+ 152              		.cfi_endproc
+ 153              	.LFE2:
+ 155              		.section	.text.init_exti,"ax",%progbits
+ 156              		.align	1
+ 157              		.global	init_exti
+ 158              		.syntax unified
+ 159              		.code	16
+ 160              		.thumb_func
+ 161              		.fpu softvfp
+ 163              	init_exti:
+ 164              	.LFB3:
+  39:main.c        **** 
+  40:main.c        **** void init_exti()
+  41:main.c        **** {
+ 165              		.loc 1 41 1 is_stmt 1 view -0
+ 166              		.cfi_startproc
+ 167              		@ args = 0, pretend = 0, frame = 0
+ 168              		@ frame_needed = 0, uses_anonymous_args = 0
+ 169              		@ link register save eliminated.
+  42:main.c        ****     // enable SYSCFG
+  43:main.c        ****     // RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+  44:main.c        ****     __HAL_RCC_SYSCFG_CLK_ENABLE();
+ 170              		.loc 1 44 5 view .LVU45
+ 171 0000 134A     		ldr	r2, .L5
+ 172 0002 536B     		ldr	r3, [r2, #52]
+ 173 0004 0121     		movs	r1, #1
+ 174 0006 0B43     		orrs	r3, r1
+ 175 0008 5363     		str	r3, [r2, #52]
+  45:main.c        **** 
+  46:main.c        ****     SYSCFG->EXTICR[BUTTON_PIN_INDEX / 4] &= ~(0XF << ((BUTTON_PIN_INDEX % 4) * 4));
+ 176              		.loc 1 46 5 view .LVU46
+ 177              		.loc 1 46 42 is_stmt 0 view .LVU47
+ 178 000a 124B     		ldr	r3, .L5+4
+ 179 000c 5A69     		ldr	r2, [r3, #20]
+ 180 000e EF31     		adds	r1, r1, #239
+ 181 0010 8A43     		bics	r2, r1
+ 182 0012 5A61     		str	r2, [r3, #20]
+  47:main.c        ****     SYSCFG->EXTICR[BUTTON_PIN_INDEX / 4] |= (0X1 << ((BUTTON_PIN_INDEX % 4) * 4));
+ 183              		.loc 1 47 5 is_stmt 1 view .LVU48
+ 184              		.loc 1 47 42 is_stmt 0 view .LVU49
+ARM GAS  /tmp/ccOLnb8w.s 			page 5
+
+
+ 185 0014 5A69     		ldr	r2, [r3, #20]
+ 186 0016 E039     		subs	r1, r1, #224
+ 187 0018 0A43     		orrs	r2, r1
+ 188 001a 5A61     		str	r2, [r3, #20]
+  48:main.c        **** 
+  49:main.c        ****     // Setup the button's EXTI line as an interrupt.
+  50:main.c        ****     EXTI->IMR |= (1 << BUTTON_PIN_INDEX);
+ 189              		.loc 1 50 5 is_stmt 1 view .LVU50
+ 190              		.loc 1 50 15 is_stmt 0 view .LVU51
+ 191 001c 0E4B     		ldr	r3, .L5+8
+ 192 001e 1968     		ldr	r1, [r3]
+ 193 0020 8022     		movs	r2, #128
+ 194 0022 9201     		lsls	r2, r2, #6
+ 195 0024 1143     		orrs	r1, r2
+ 196 0026 1960     		str	r1, [r3]
+  51:main.c        ****     // Disable the 'rising edge' trigger (button release).
+  52:main.c        ****     EXTI->RTSR &= ~(1 << BUTTON_PIN_INDEX);
+ 197              		.loc 1 52 5 is_stmt 1 view .LVU52
+ 198              		.loc 1 52 16 is_stmt 0 view .LVU53
+ 199 0028 9968     		ldr	r1, [r3, #8]
+ 200 002a 0C48     		ldr	r0, .L5+12
+ 201 002c 0140     		ands	r1, r0
+ 202 002e 9960     		str	r1, [r3, #8]
+  53:main.c        ****     // Enable the 'falling edge' trigger (button press).
+  54:main.c        ****     EXTI->FTSR |= (1 << BUTTON_PIN_INDEX);
+ 203              		.loc 1 54 5 is_stmt 1 view .LVU54
+ 204              		.loc 1 54 16 is_stmt 0 view .LVU55
+ 205 0030 D968     		ldr	r1, [r3, #12]
+ 206 0032 0A43     		orrs	r2, r1
+ 207 0034 DA60     		str	r2, [r3, #12]
+  55:main.c        **** 
+  56:main.c        ****     /* EXTI interrupt init*/
+  57:main.c        ****     NVIC_SetPriority(EXTI4_15_IRQn, 0x03);
+ 208              		.loc 1 57 5 is_stmt 1 view .LVU56
+ 209              	.LVL0:
+ 210              	.LBB9:
+ 211              	.LBI9:
+ 212              		.file 2 "main.h"
+   1:main.h        **** #ifndef MAIN_H_
+   2:main.h        **** #define MAIN_H_
+   3:main.h        **** 
+   4:main.h        **** #include <stdint.h>
+   5:main.h        **** 
+   6:main.h        **** #define __IO volatile /*!< Defines 'read / write' permissions */
+   7:main.h        **** #define __STATIC_INLINE static inline
+   8:main.h        **** 
+   9:main.h        **** #define READ_BIT(REG, BIT) ((REG) & (BIT))
+  10:main.h        **** #define SET_BIT(REG, BIT) ((REG) |= (BIT))
+  11:main.h        **** #define UNUSED(X) (void)X /* To avoid gcc/g++ warnings */
+  12:main.h        **** 
+  13:main.h        **** typedef struct
+  14:main.h        **** {
+  15:main.h        ****   __IO uint32_t MODER;   /*!< GPIO port mode register,                     Address offset: 0x00 */
+  16:main.h        ****   __IO uint32_t OTYPER;  /*!< GPIO port output type register,              Address offset: 0x04 */
+  17:main.h        ****   __IO uint32_t OSPEEDR; /*!< GPIO port output speed register,             Address offset: 0x08 */
+  18:main.h        ****   __IO uint32_t PUPDR;   /*!< GPIO port pull-up/pull-down register,        Address offset: 0x0C */
+  19:main.h        ****   __IO uint32_t IDR;     /*!< GPIO port input data register,               Address offset: 0x10 */
+ARM GAS  /tmp/ccOLnb8w.s 			page 6
+
+
+  20:main.h        ****   __IO uint32_t ODR;     /*!< GPIO port output data register,              Address offset: 0x14 */
+  21:main.h        ****   __IO uint32_t BSRR;    /*!< GPIO port bit set/reset registerBSRR,        Address offset: 0x18 */
+  22:main.h        ****   __IO uint32_t LCKR;    /*!< GPIO port configuration lock register,       Address offset: 0x1C */
+  23:main.h        ****   __IO uint32_t AFR[2];  /*!< GPIO alternate function register,            Address offset: 0x20-0x2
+  24:main.h        ****   __IO uint32_t BRR;     /*!< GPIO bit reset register,                     Address offset: 0x28 */
+  25:main.h        **** } GPIO_TypeDef;
+  26:main.h        **** /**
+  27:main.h        ****  * @brief Reset and Clock Control
+  28:main.h        ****  */
+  29:main.h        **** 
+  30:main.h        **** typedef struct
+  31:main.h        **** {
+  32:main.h        ****   __IO uint32_t CR;        /*!< RCC clock control register,                                   Addre
+  33:main.h        ****   __IO uint32_t ICSCR;     /*!< RCC Internal clock sources calibration register,              Addre
+  34:main.h        ****   __IO uint32_t CRRCR;     /*!< RCC Clock recovery RC register,                               Addre
+  35:main.h        ****   __IO uint32_t CFGR;      /*!< RCC Clock configuration register,                             Addre
+  36:main.h        ****   __IO uint32_t CIER;      /*!< RCC Clock interrupt enable register,                          Addre
+  37:main.h        ****   __IO uint32_t CIFR;      /*!< RCC Clock interrupt flag register,                            Addre
+  38:main.h        ****   __IO uint32_t CICR;      /*!< RCC Clock interrupt clear register,                           Addre
+  39:main.h        ****   __IO uint32_t IOPRSTR;   /*!< RCC IO port reset register,                                   Addre
+  40:main.h        ****   __IO uint32_t AHBRSTR;   /*!< RCC AHB peripheral reset register,                            Addre
+  41:main.h        ****   __IO uint32_t APB2RSTR;  /*!< RCC APB2 peripheral reset register,                           Addre
+  42:main.h        ****   __IO uint32_t APB1RSTR;  /*!< RCC APB1 peripheral reset register,                           Addre
+  43:main.h        ****   __IO uint32_t IOPENR;    /*!< RCC Clock IO port enable register,                            Addre
+  44:main.h        ****   __IO uint32_t AHBENR;    /*!< RCC AHB peripheral clock enable register,                     Addre
+  45:main.h        ****   __IO uint32_t APB2ENR;   /*!< RCC APB2 peripheral enable register,                          Addre
+  46:main.h        ****   __IO uint32_t APB1ENR;   /*!< RCC APB1 peripheral enable register,                          Addre
+  47:main.h        ****   __IO uint32_t IOPSMENR;  /*!< RCC IO port clock enable in sleep mode register,              Addre
+  48:main.h        ****   __IO uint32_t AHBSMENR;  /*!< RCC AHB peripheral clock enable in sleep mode register,       Addre
+  49:main.h        ****   __IO uint32_t APB2SMENR; /*!< RCC APB2 peripheral clock enable in sleep mode register,      Addre
+  50:main.h        ****   __IO uint32_t APB1SMENR; /*!< RCC APB1 peripheral clock enable in sleep mode register,      Addre
+  51:main.h        ****   __IO uint32_t CCIPR;     /*!< RCC clock configuration register,                             Addre
+  52:main.h        ****   __IO uint32_t CSR;       /*!< RCC Control/status register,                                  Addre
+  53:main.h        **** } RCC_TypeDef;
+  54:main.h        **** 
+  55:main.h        **** #define PERIPH_BASE (0x40000000UL) /*!< Peripheral base address in the alias region */
+  56:main.h        **** #define AHBPERIPH_BASE (PERIPH_BASE + 0x00020000UL)
+  57:main.h        **** #define IOPPERIPH_BASE (PERIPH_BASE + 0x10000000UL)
+  58:main.h        **** #define RCC_BASE (AHBPERIPH_BASE + 0x00001000UL)
+  59:main.h        **** // 0x40021000
+  60:main.h        **** 
+  61:main.h        **** #define RCC ((RCC_TypeDef *)RCC_BASE)
+  62:main.h        **** 
+  63:main.h        **** #define GPIOA_BASE (IOPPERIPH_BASE + 0x00000000UL)
+  64:main.h        **** #define GPIOA ((GPIO_TypeDef *)GPIOA_BASE)
+  65:main.h        **** 
+  66:main.h        **** #define GPIOB_BASE (IOPPERIPH_BASE + 0x00000400UL)
+  67:main.h        **** #define GPIOB ((GPIO_TypeDef *)GPIOB_BASE)
+  68:main.h        **** 
+  69:main.h        **** #define GPIO_PIN_13 (1 << 13)
+  70:main.h        **** #define GPIOC_BASE (IOPPERIPH_BASE + 0x00000800UL)
+  71:main.h        **** #define GPIOC ((GPIO_TypeDef *)GPIOC_BASE)
+  72:main.h        **** #define BUTTON_PIN GPIO_PIN_13
+  73:main.h        **** #define BUTTON_PORT GPIOC
+  74:main.h        **** 
+  75:main.h        **** #define RCC_IOPENR_IOPAEN_Pos (0U)
+  76:main.h        **** #define RCC_IOPENR_IOPAEN_Msk (0x1UL << RCC_IOPENR_IOPAEN_Pos) /*!< 0x00000001 */
+ARM GAS  /tmp/ccOLnb8w.s 			page 7
+
+
+  77:main.h        **** #define RCC_IOPENR_IOPAEN RCC_IOPENR_IOPAEN_Msk                /*!< GPIO port A clock enable */
+  78:main.h        **** #define RCC_IOPENR_GPIOAEN RCC_IOPENR_IOPAEN                   /*!< GPIO port A clock enable */
+  79:main.h        **** 
+  80:main.h        **** #define RCC_IOPENR_IOPBEN_Pos (1U)
+  81:main.h        **** #define RCC_IOPENR_IOPBEN_Msk (0x1UL << RCC_IOPENR_IOPBEN_Pos) /*!< 0x00000002 */
+  82:main.h        **** #define RCC_IOPENR_IOPBEN RCC_IOPENR_IOPBEN_Msk                /*!< GPIO port B clock enable */
+  83:main.h        **** #define RCC_IOPENR_GPIOBEN RCC_IOPENR_IOPBEN                   /*!< GPIO port B clock enable */
+  84:main.h        **** 
+  85:main.h        **** #define RCC_IOPENR_IOPCEN_Pos (2U)
+  86:main.h        **** #define RCC_IOPENR_IOPCEN_Msk (0x1UL << RCC_IOPENR_IOPCEN_Pos) /*!< 0x00000004 */
+  87:main.h        **** #define RCC_IOPENR_IOPCEN RCC_IOPENR_IOPCEN_Msk                /*!< GPIO port C clock enable */
+  88:main.h        **** #define RCC_IOPENR_GPIOCEN RCC_IOPENR_IOPCEN                   /*!< GPIO port C clock enable */
+  89:main.h        **** 
+  90:main.h        **** #define __HAL_RCC_GPIOA_CLK_ENABLE()                    \
+  91:main.h        ****   do                                                    \
+  92:main.h        ****   {                                                     \
+  93:main.h        ****     __IO uint32_t tmpreg;                               \
+  94:main.h        ****     SET_BIT(RCC->IOPENR, RCC_IOPENR_GPIOAEN);           \
+  95:main.h        ****     /* Delay after an RCC peripheral clock enabling */  \
+  96:main.h        ****     tmpreg = READ_BIT(RCC->IOPENR, RCC_IOPENR_GPIOAEN); \
+  97:main.h        ****     UNUSED(tmpreg);                                     \
+  98:main.h        ****   } while (0)
+  99:main.h        **** 
+ 100:main.h        **** #define __HAL_RCC_GPIOB_CLK_ENABLE()                    \
+ 101:main.h        ****   do                                                    \
+ 102:main.h        ****   {                                                     \
+ 103:main.h        ****     __IO uint32_t tmpreg;                               \
+ 104:main.h        ****     SET_BIT(RCC->IOPENR, RCC_IOPENR_GPIOBEN);           \
+ 105:main.h        ****     /* Delay after an RCC peripheral clock enabling */  \
+ 106:main.h        ****     tmpreg = READ_BIT(RCC->IOPENR, RCC_IOPENR_GPIOBEN); \
+ 107:main.h        ****     UNUSED(tmpreg);                                     \
+ 108:main.h        ****   } while (0)
+ 109:main.h        **** #define __HAL_RCC_GPIOC_CLK_ENABLE()                    \
+ 110:main.h        ****   do                                                    \
+ 111:main.h        ****   {                                                     \
+ 112:main.h        ****     __IO uint32_t tmpreg;                               \
+ 113:main.h        ****     SET_BIT(RCC->IOPENR, RCC_IOPENR_GPIOCEN);           \
+ 114:main.h        ****     /* Delay after an RCC peripheral clock enabling */  \
+ 115:main.h        ****     tmpreg = READ_BIT(RCC->IOPENR, RCC_IOPENR_GPIOCEN); \
+ 116:main.h        ****     UNUSED(tmpreg);                                     \
+ 117:main.h        ****   } while (0)
+ 118:main.h        **** 
+ 119:main.h        **** typedef struct
+ 120:main.h        **** {
+ 121:main.h        ****   __IO uint32_t CFGR1;     /*!< SYSCFG configuration register 1,                    Address offset:
+ 122:main.h        ****   __IO uint32_t CFGR2;     /*!< SYSCFG configuration register 2,                    Address offset:
+ 123:main.h        ****   __IO uint32_t EXTICR[4]; /*!< SYSCFG external interrupt configuration register,   Address offset:
+ 124:main.h        ****   uint32_t RESERVED[2];    /*!< Reserved,                                           0x18-0x1C */
+ 125:main.h        ****   __IO uint32_t CFGR3;     /*!< SYSCFG configuration register 3,                    Address offset:
+ 126:main.h        **** } SYSCFG_TypeDef;
+ 127:main.h        **** 
+ 128:main.h        **** #define APBPERIPH_BASE PERIPH_BASE
+ 129:main.h        **** #define SYSCFG_BASE (APBPERIPH_BASE + 0x00010000UL)
+ 130:main.h        **** #define SYSCFG ((SYSCFG_TypeDef *)SYSCFG_BASE)
+ 131:main.h        **** #define RCC_APB2ENR_SYSCFGEN_Pos (0U)
+ 132:main.h        **** #define RCC_APB2ENR_SYSCFGEN_Msk (0x1UL << RCC_APB2ENR_SYSCFGEN_Pos) /*!< 0x00000001 */
+ 133:main.h        **** #define RCC_APB2ENR_SYSCFGEN RCC_APB2ENR_SYSCFGEN_Msk                /*!< SYSCFG clock enable */
+ARM GAS  /tmp/ccOLnb8w.s 			page 8
+
+
+ 134:main.h        **** 
+ 135:main.h        **** #define __HAL_RCC_SYSCFG_CLK_ENABLE() SET_BIT(RCC->APB2ENR, (RCC_APB2ENR_SYSCFGEN))
+ 136:main.h        **** 
+ 137:main.h        **** typedef struct
+ 138:main.h        **** {
+ 139:main.h        ****   __IO uint32_t IMR;   /*!<EXTI Interrupt mask register,                 Address offset: 0x00 */
+ 140:main.h        ****   __IO uint32_t EMR;   /*!<EXTI Event mask register,                     Address offset: 0x04 */
+ 141:main.h        ****   __IO uint32_t RTSR;  /*!<EXTI Rising trigger selection register ,      Address offset: 0x08 */
+ 142:main.h        ****   __IO uint32_t FTSR;  /*!<EXTI Falling trigger selection register,      Address offset: 0x0C */
+ 143:main.h        ****   __IO uint32_t SWIER; /*!<EXTI Software interrupt event register,       Address offset: 0x10 */
+ 144:main.h        ****   __IO uint32_t PR;    /*!<EXTI Pending register,                        Address offset: 0x14 */
+ 145:main.h        **** } EXTI_TypeDef;
+ 146:main.h        **** 
+ 147:main.h        **** #define EXTI_BASE (APBPERIPH_BASE + 0x00010400UL)
+ 148:main.h        **** #define EXTI ((EXTI_TypeDef *)EXTI_BASE)
+ 149:main.h        **** 
+ 150:main.h        **** #define BUTTON_PIN_INDEX 13
+ 151:main.h        **** 
+ 152:main.h        **** /**
+ 153:main.h        ****  * @brief stm32l073xx Interrupt Number Definition, according to the selected device
+ 154:main.h        ****  *        in @ref Library_configuration_section
+ 155:main.h        ****  */
+ 156:main.h        **** 
+ 157:main.h        **** /*!< Interrupt Number Definition */
+ 158:main.h        **** typedef enum
+ 159:main.h        **** {
+ 160:main.h        ****   /******  Cortex-M0 Processor Exceptions Numbers *************************************************
+ 161:main.h        ****   NonMaskableInt_IRQn = -14, /*!< 2 Non Maskable Interrupt                                */
+ 162:main.h        ****   HardFault_IRQn = -13,      /*!< 3 Cortex-M0+ Hard Fault Interrupt                       */
+ 163:main.h        ****   SVCall_IRQn = -5,          /*!< 11 Cortex-M0+ SV Call Interrupt                         */
+ 164:main.h        ****   PendSV_IRQn = -2,          /*!< 14 Cortex-M0+ Pend SV Interrupt                         */
+ 165:main.h        ****   SysTick_IRQn = -1,         /*!< 15 Cortex-M0+ System Tick Interrupt                     */
+ 166:main.h        **** 
+ 167:main.h        ****   /******  STM32L-0 specific Interrupt Numbers ****************************************************
+ 168:main.h        ****   WWDG_IRQn = 0,                 /*!< Window WatchDog Interrupt                               */
+ 169:main.h        ****   PVD_IRQn = 1,                  /*!< PVD through EXTI Line detect Interrupt                  */
+ 170:main.h        ****   RTC_IRQn = 2,                  /*!< RTC through EXTI Line Interrupt                         */
+ 171:main.h        ****   FLASH_IRQn = 3,                /*!< FLASH Interrupt                                         */
+ 172:main.h        ****   RCC_CRS_IRQn = 4,              /*!< RCC and CRS Interrupts                                  */
+ 173:main.h        ****   EXTI0_1_IRQn = 5,              /*!< EXTI Line 0 and 1 Interrupts                            */
+ 174:main.h        ****   EXTI2_3_IRQn = 6,              /*!< EXTI Line 2 and 3 Interrupts                            */
+ 175:main.h        ****   EXTI4_15_IRQn = 7,             /*!< EXTI Line 4 to 15 Interrupts                            */
+ 176:main.h        ****   TSC_IRQn = 8,                  /*!< TSC Interrupt                                           */
+ 177:main.h        ****   DMA1_Channel1_IRQn = 9,        /*!< DMA1 Channel 1 Interrupt                                */
+ 178:main.h        ****   DMA1_Channel2_3_IRQn = 10,     /*!< DMA1 Channel 2 and Channel 3 Interrupts                 */
+ 179:main.h        ****   DMA1_Channel4_5_6_7_IRQn = 11, /*!< DMA1 Channel 4, Channel 5, Channel 6 and Channel 7 Interrupts
+ 180:main.h        ****   ADC1_COMP_IRQn = 12,           /*!< ADC1, COMP1 and COMP2 Interrupts                        */
+ 181:main.h        ****   LPTIM1_IRQn = 13,              /*!< LPTIM1 Interrupt                                        */
+ 182:main.h        ****   USART4_5_IRQn = 14,            /*!< USART4 and USART5 Interrupt                             */
+ 183:main.h        ****   TIM2_IRQn = 15,                /*!< TIM2 Interrupt                                          */
+ 184:main.h        ****   TIM3_IRQn = 16,                /*!< TIM3 Interrupt                                          */
+ 185:main.h        ****   TIM6_DAC_IRQn = 17,            /*!< TIM6 and DAC Interrupts                                 */
+ 186:main.h        ****   TIM7_IRQn = 18,                /*!< TIM7 Interrupt                                          */
+ 187:main.h        ****   TIM21_IRQn = 20,               /*!< TIM21 Interrupt                                         */
+ 188:main.h        ****   I2C3_IRQn = 21,                /*!< I2C3 Interrupt                                          */
+ 189:main.h        ****   TIM22_IRQn = 22,               /*!< TIM22 Interrupt                                         */
+ 190:main.h        ****   I2C1_IRQn = 23,                /*!< I2C1 Interrupt                                          */
+ARM GAS  /tmp/ccOLnb8w.s 			page 9
+
+
+ 191:main.h        ****   I2C2_IRQn = 24,                /*!< I2C2 Interrupt                                          */
+ 192:main.h        ****   SPI1_IRQn = 25,                /*!< SPI1 Interrupt                                          */
+ 193:main.h        ****   SPI2_IRQn = 26,                /*!< SPI2 Interrupt                                          */
+ 194:main.h        ****   USART1_IRQn = 27,              /*!< USART1 Interrupt                                        */
+ 195:main.h        ****   USART2_IRQn = 28,              /*!< USART2 Interrupt                                        */
+ 196:main.h        ****   RNG_LPUART1_IRQn = 29,         /*!< RNG and LPUART1 Interrupts                              */
+ 197:main.h        ****   LCD_IRQn = 30,                 /*!< LCD Interrupt                                           */
+ 198:main.h        ****   USB_IRQn = 31,                 /*!< USB global Interrupt                                    */
+ 199:main.h        **** } IRQn_Type;
+ 200:main.h        **** 
+ 201:main.h        **** #define __IM volatile const /*! Defines 'read only' structure member permissions */
+ 202:main.h        **** #define __IOM volatile      /*! Defines 'read / write' structure member permissions */
+ 203:main.h        **** /**
+ 204:main.h        ****   \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 205:main.h        ****  */
+ 206:main.h        **** typedef struct
+ 207:main.h        **** {
+ 208:main.h        ****   __IOM uint32_t ISER[1U]; /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+ 209:main.h        ****   uint32_t RESERVED0[31U];
+ 210:main.h        ****   __IOM uint32_t ICER[1U]; /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register */
+ 211:main.h        ****   uint32_t RSERVED1[31U];
+ 212:main.h        ****   __IOM uint32_t ISPR[1U]; /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register */
+ 213:main.h        ****   uint32_t RESERVED2[31U];
+ 214:main.h        ****   __IOM uint32_t ICPR[1U]; /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register */
+ 215:main.h        ****   uint32_t RESERVED3[31U];
+ 216:main.h        ****   uint32_t RESERVED4[64U];
+ 217:main.h        ****   __IOM uint32_t IP[8U]; /*!< Offset: 0x300 (R/W)  Interrupt Priority Register */
+ 218:main.h        **** } NVIC_Type;
+ 219:main.h        **** /**
+ 220:main.h        ****   \brief  Structure type to access the System Control Block (SCB).
+ 221:main.h        ****  */
+ 222:main.h        **** typedef struct
+ 223:main.h        **** {
+ 224:main.h        ****   __IM uint32_t CPUID; /*!< Offset: 0x000 (R/ )  CPUID Base Register */
+ 225:main.h        ****   __IOM uint32_t ICSR; /*!< Offset: 0x004 (R/W)  Interrupt Control and State Register */
+ 226:main.h        **** #if defined(__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 227:main.h        ****   __IOM uint32_t VTOR; /*!< Offset: 0x008 (R/W)  Vector Table Offset Register */
+ 228:main.h        **** #else
+ 229:main.h        ****   uint32_t RESERVED0;
+ 230:main.h        **** #endif
+ 231:main.h        ****   __IOM uint32_t AIRCR; /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset Control Register 
+ 232:main.h        ****   __IOM uint32_t SCR;   /*!< Offset: 0x010 (R/W)  System Control Register */
+ 233:main.h        ****   __IOM uint32_t CCR;   /*!< Offset: 0x014 (R/W)  Configuration Control Register */
+ 234:main.h        ****   uint32_t RESERVED1;
+ 235:main.h        ****   __IOM uint32_t SHP[2U]; /*!< Offset: 0x01C (R/W)  System Handlers Priority Registers. [0] is RESE
+ 236:main.h        ****   __IOM uint32_t SHCSR;   /*!< Offset: 0x024 (R/W)  System Handler Control and State Register */
+ 237:main.h        **** } SCB_Type;
+ 238:main.h        **** 
+ 239:main.h        **** #define SCS_BASE (0xE000E000UL)         /*!< System Control Space Base Address */
+ 240:main.h        **** #define NVIC_BASE (SCS_BASE + 0x0100UL) /*!< NVIC Base Address */
+ 241:main.h        **** #define SCB_BASE (SCS_BASE + 0x0D00UL)  /*!< System Control Block Base Address */
+ 242:main.h        **** 
+ 243:main.h        **** #define SCB ((SCB_Type *)SCB_BASE)    /*!< SCB configuration struct */
+ 244:main.h        **** #define NVIC ((NVIC_Type *)NVIC_BASE) /*!< NVIC configuration struct */
+ 245:main.h        **** 
+ 246:main.h        **** /* Interrupt Priorities are WORD accessible only under Armv6-M                  */
+ 247:main.h        **** /* The following MACROS handle generation of the register offset and byte masks */
+ARM GAS  /tmp/ccOLnb8w.s 			page 10
+
+
+ 248:main.h        **** #define _BIT_SHIFT(IRQn) (((((uint32_t)(int32_t)(IRQn))) & 0x03UL) * 8UL)
+ 249:main.h        **** #define _SHP_IDX(IRQn) ((((((uint32_t)(int32_t)(IRQn)) & 0x0FUL) - 8UL) >> 2UL))
+ 250:main.h        **** #define _IP_IDX(IRQn) ((((uint32_t)(int32_t)(IRQn)) >> 2UL))
+ 251:main.h        **** 
+ 252:main.h        **** #define __NVIC_PRIO_BITS 2U /*!< STM32L0xx uses 2 Bits for the Priority Levels */
+ 253:main.h        **** 
+ 254:main.h        **** __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+ 213              		.loc 2 254 22 view .LVU57
+ 214              	.LBB10:
+ 255:main.h        **** {
+ 256:main.h        ****   if ((int32_t)(IRQn) >= 0)
+ 215              		.loc 2 256 3 view .LVU58
+ 257:main.h        ****   {
+ 258:main.h        ****     NVIC->IP[_IP_IDX(IRQn)] = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))) 
+ 216              		.loc 2 258 5 view .LVU59
+ 217              		.loc 2 258 51 is_stmt 0 view .LVU60
+ 218 0036 0A4A     		ldr	r2, .L5+16
+ 219 0038 C120     		movs	r0, #193
+ 220 003a 8000     		lsls	r0, r0, #2
+ 221 003c 1358     		ldr	r3, [r2, r0]
+ 222              		.loc 2 258 32 view .LVU61
+ 223 003e 1B02     		lsls	r3, r3, #8
+ 224 0040 1B0A     		lsrs	r3, r3, #8
+ 225              		.loc 2 258 100 view .LVU62
+ 226 0042 C021     		movs	r1, #192
+ 227 0044 0906     		lsls	r1, r1, #24
+ 228 0046 0B43     		orrs	r3, r1
+ 229              		.loc 2 258 29 view .LVU63
+ 230 0048 1350     		str	r3, [r2, r0]
+ 231              	.LVL1:
+ 232              		.loc 2 258 29 view .LVU64
+ 233              	.LBE10:
+ 234              	.LBE9:
+  58:main.c        ****     NVIC_EnableIRQ(EXTI4_15_IRQn);
+ 235              		.loc 1 58 5 is_stmt 1 view .LVU65
+ 236              	.LBB11:
+ 237              	.LBI11:
+ 259:main.h        ****                                (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_
+ 260:main.h        ****   }
+ 261:main.h        ****   else
+ 262:main.h        ****   {
+ 263:main.h        ****     SCB->SHP[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHP[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))
+ 264:main.h        ****                                 (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT
+ 265:main.h        ****   }
+ 266:main.h        **** }
+ 267:main.h        **** 
+ 268:main.h        **** #define NVIC_SetPriority __NVIC_SetPriority
+ 269:main.h        **** 
+ 270:main.h        **** 
+ 271:main.h        **** __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+ 238              		.loc 2 271 22 view .LVU66
+ 239              	.LBB12:
+ 272:main.h        **** {
+ 273:main.h        ****   if ((int32_t)(IRQn) >= 0)
+ 240              		.loc 2 273 3 view .LVU67
+ 274:main.h        ****   {
+ 275:main.h        ****     NVIC->ISER[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+ARM GAS  /tmp/ccOLnb8w.s 			page 11
+
+
+ 241              		.loc 2 275 5 view .LVU68
+ 242              		.loc 2 275 20 is_stmt 0 view .LVU69
+ 243 004a 8023     		movs	r3, #128
+ 244 004c 1360     		str	r3, [r2]
+ 245              	.LVL2:
+ 246              		.loc 2 275 20 view .LVU70
+ 247              	.LBE12:
+ 248              	.LBE11:
+  59:main.c        **** }
+ 249              		.loc 1 59 1 view .LVU71
+ 250              		@ sp needed
+ 251 004e 7047     		bx	lr
+ 252              	.L6:
+ 253              		.align	2
+ 254              	.L5:
+ 255 0050 00100240 		.word	1073876992
+ 256 0054 00000140 		.word	1073807360
+ 257 0058 00040140 		.word	1073808384
+ 258 005c FFDFFFFF 		.word	-8193
+ 259 0060 00E100E0 		.word	-536813312
+ 260              		.cfi_endproc
+ 261              	.LFE3:
+ 263              		.section	.text.SystemInit,"ax",%progbits
+ 264              		.align	1
+ 265              		.global	SystemInit
+ 266              		.syntax unified
+ 267              		.code	16
+ 268              		.thumb_func
+ 269              		.fpu softvfp
+ 271              	SystemInit:
+ 272              	.LFB4:
+  60:main.c        **** 
+  61:main.c        **** void SystemInit(void)
+  62:main.c        **** {
+ 273              		.loc 1 62 1 is_stmt 1 view -0
+ 274              		.cfi_startproc
+ 275              		@ args = 0, pretend = 0, frame = 0
+ 276              		@ frame_needed = 0, uses_anonymous_args = 0
+ 277              		@ link register save eliminated.
+  63:main.c        **** }
+ 278              		.loc 1 63 1 view .LVU73
+ 279              		@ sp needed
+ 280 0000 7047     		bx	lr
+ 281              		.cfi_endproc
+ 282              	.LFE4:
+ 284              		.section	.text.toggle_led,"ax",%progbits
+ 285              		.align	1
+ 286              		.global	toggle_led
+ 287              		.syntax unified
+ 288              		.code	16
+ 289              		.thumb_func
+ 290              		.fpu softvfp
+ 292              	toggle_led:
+ 293              	.LFB6:
+  64:main.c        **** 
+  65:main.c        **** void EXTI4_15_IRQHandler(void)
+  66:main.c        **** {
+ARM GAS  /tmp/ccOLnb8w.s 			page 12
+
+
+  67:main.c        ****     if (EXTI->PR & (1 << BUTTON_PIN_INDEX) == (1 << BUTTON_PIN_INDEX))
+  68:main.c        ****     {
+  69:main.c        ****         // Clear the EXTI status flag.
+  70:main.c        ****         EXTI->PR |= (1 << BUTTON_PIN_INDEX);
+  71:main.c        ****         toggle_led();
+  72:main.c        ****     }
+  73:main.c        **** }
+  74:main.c        **** 
+  75:main.c        **** void toggle_led()
+  76:main.c        **** {
+ 294              		.loc 1 76 1 view -0
+ 295              		.cfi_startproc
+ 296              		@ args = 0, pretend = 0, frame = 0
+ 297              		@ frame_needed = 0, uses_anonymous_args = 0
+ 298              		@ link register save eliminated.
+  77:main.c        ****     static int x = 1;
+ 299              		.loc 1 77 5 view .LVU75
+  78:main.c        ****     if (x)
+ 300              		.loc 1 78 5 view .LVU76
+ 301              		.loc 1 78 9 is_stmt 0 view .LVU77
+ 302 0000 0C4B     		ldr	r3, .L11
+ 303 0002 1B68     		ldr	r3, [r3]
+ 304              		.loc 1 78 8 view .LVU78
+ 305 0004 002B     		cmp	r3, #0
+ 306 0006 0AD0     		beq	.L9
+  79:main.c        ****     {
+  80:main.c        ****         GPIOA->BSRR = 1 << (5);
+ 307              		.loc 1 80 9 is_stmt 1 view .LVU79
+ 308              		.loc 1 80 21 is_stmt 0 view .LVU80
+ 309 0008 A023     		movs	r3, #160
+ 310 000a DB05     		lsls	r3, r3, #23
+ 311 000c 2022     		movs	r2, #32
+ 312 000e 9A61     		str	r2, [r3, #24]
+  81:main.c        ****         // Set the output bit.
+  82:main.c        ****         GPIOB->BSRR = 1 << (USER_LED_INDEX);
+ 313              		.loc 1 82 9 is_stmt 1 view .LVU81
+ 314              		.loc 1 82 21 is_stmt 0 view .LVU82
+ 315 0010 094B     		ldr	r3, .L11+4
+ 316 0012 183A     		subs	r2, r2, #24
+ 317 0014 9A61     		str	r2, [r3, #24]
+  83:main.c        ****         x = 0;
+ 318              		.loc 1 83 9 is_stmt 1 view .LVU83
+ 319              		.loc 1 83 11 is_stmt 0 view .LVU84
+ 320 0016 074B     		ldr	r3, .L11
+ 321 0018 0022     		movs	r2, #0
+ 322 001a 1A60     		str	r2, [r3]
+ 323              	.L8:
+  84:main.c        ****     }
+  85:main.c        ****     else
+  86:main.c        ****     {
+  87:main.c        ****         GPIOA->BRR = 1 << (5);
+  88:main.c        ****         x = 1;
+  89:main.c        ****         // Reset it again.
+  90:main.c        ****         GPIOB->BRR = 1 << (USER_LED_INDEX);
+  91:main.c        ****     }
+  92:main.c        **** }
+ 324              		.loc 1 92 1 view .LVU85
+ARM GAS  /tmp/ccOLnb8w.s 			page 13
+
+
+ 325              		@ sp needed
+ 326 001c 7047     		bx	lr
+ 327              	.L9:
+  87:main.c        ****         x = 1;
+ 328              		.loc 1 87 9 is_stmt 1 view .LVU86
+  87:main.c        ****         x = 1;
+ 329              		.loc 1 87 20 is_stmt 0 view .LVU87
+ 330 001e A023     		movs	r3, #160
+ 331 0020 DB05     		lsls	r3, r3, #23
+ 332 0022 2022     		movs	r2, #32
+ 333 0024 9A62     		str	r2, [r3, #40]
+  88:main.c        ****         // Reset it again.
+ 334              		.loc 1 88 9 is_stmt 1 view .LVU88
+  88:main.c        ****         // Reset it again.
+ 335              		.loc 1 88 11 is_stmt 0 view .LVU89
+ 336 0026 034B     		ldr	r3, .L11
+ 337 0028 1F3A     		subs	r2, r2, #31
+ 338 002a 1A60     		str	r2, [r3]
+  90:main.c        ****     }
+ 339              		.loc 1 90 9 is_stmt 1 view .LVU90
+  90:main.c        ****     }
+ 340              		.loc 1 90 20 is_stmt 0 view .LVU91
+ 341 002c 024B     		ldr	r3, .L11+4
+ 342 002e 0732     		adds	r2, r2, #7
+ 343 0030 9A62     		str	r2, [r3, #40]
+ 344              		.loc 1 92 1 view .LVU92
+ 345 0032 F3E7     		b	.L8
+ 346              	.L12:
+ 347              		.align	2
+ 348              	.L11:
+ 349 0034 00000000 		.word	.LANCHOR0
+ 350 0038 00040050 		.word	1342178304
+ 351              		.cfi_endproc
+ 352              	.LFE6:
+ 354              		.section	.text.EXTI4_15_IRQHandler,"ax",%progbits
+ 355              		.align	1
+ 356              		.global	EXTI4_15_IRQHandler
+ 357              		.syntax unified
+ 358              		.code	16
+ 359              		.thumb_func
+ 360              		.fpu softvfp
+ 362              	EXTI4_15_IRQHandler:
+ 363              	.LFB5:
+  66:main.c        ****     if (EXTI->PR & (1 << BUTTON_PIN_INDEX) == (1 << BUTTON_PIN_INDEX))
+ 364              		.loc 1 66 1 is_stmt 1 view -0
+ 365              		.cfi_startproc
+ 366              		@ args = 0, pretend = 0, frame = 0
+ 367              		@ frame_needed = 0, uses_anonymous_args = 0
+ 368 0000 10B5     		push	{r4, lr}
+ 369              		.cfi_def_cfa_offset 8
+ 370              		.cfi_offset 4, -8
+ 371              		.cfi_offset 14, -4
+  67:main.c        ****     {
+ 372              		.loc 1 67 5 view .LVU94
+  67:main.c        ****     {
+ 373              		.loc 1 67 13 is_stmt 0 view .LVU95
+ 374 0002 074B     		ldr	r3, .L16
+ARM GAS  /tmp/ccOLnb8w.s 			page 14
+
+
+ 375 0004 5B69     		ldr	r3, [r3, #20]
+  67:main.c        ****     {
+ 376              		.loc 1 67 8 view .LVU96
+ 377 0006 DB07     		lsls	r3, r3, #31
+ 378 0008 00D4     		bmi	.L15
+ 379              	.L13:
+  73:main.c        **** 
+ 380              		.loc 1 73 1 view .LVU97
+ 381              		@ sp needed
+ 382 000a 10BD     		pop	{r4, pc}
+ 383              	.L15:
+ 384              	.LBB13:
+  70:main.c        ****         toggle_led();
+ 385              		.loc 1 70 9 is_stmt 1 view .LVU98
+  70:main.c        ****         toggle_led();
+ 386              		.loc 1 70 18 is_stmt 0 view .LVU99
+ 387 000c 044A     		ldr	r2, .L16
+ 388 000e 5169     		ldr	r1, [r2, #20]
+ 389 0010 8023     		movs	r3, #128
+ 390 0012 9B01     		lsls	r3, r3, #6
+ 391 0014 0B43     		orrs	r3, r1
+ 392 0016 5361     		str	r3, [r2, #20]
+  71:main.c        ****     }
+ 393              		.loc 1 71 9 is_stmt 1 view .LVU100
+ 394 0018 FFF7FEFF 		bl	toggle_led
+ 395              	.LVL3:
+ 396              	.LBE13:
+  73:main.c        **** 
+ 397              		.loc 1 73 1 is_stmt 0 view .LVU101
+ 398 001c F5E7     		b	.L13
+ 399              	.L17:
+ 400 001e C046     		.align	2
+ 401              	.L16:
+ 402 0020 00040140 		.word	1073808384
+ 403              		.cfi_endproc
+ 404              	.LFE5:
+ 406              		.section	.text.main,"ax",%progbits
+ 407              		.align	1
+ 408              		.global	main
+ 409              		.syntax unified
+ 410              		.code	16
+ 411              		.thumb_func
+ 412              		.fpu softvfp
+ 414              	main:
+ 415              	.LFB7:
+  93:main.c        **** 
+  94:main.c        **** int main(void)
+  95:main.c        **** {
+ 416              		.loc 1 95 1 is_stmt 1 view -0
+ 417              		.cfi_startproc
+ 418              		@ args = 0, pretend = 0, frame = 0
+ 419              		@ frame_needed = 0, uses_anonymous_args = 0
+ 420 0000 10B5     		push	{r4, lr}
+ 421              		.cfi_def_cfa_offset 8
+ 422              		.cfi_offset 4, -8
+ 423              		.cfi_offset 14, -4
+  96:main.c        ****     int toggle = 40000;
+ARM GAS  /tmp/ccOLnb8w.s 			page 15
+
+
+ 424              		.loc 1 96 5 view .LVU103
+ 425              	.LVL4:
+  97:main.c        **** 
+  98:main.c        ****     init_gpio();
+ 426              		.loc 1 98 5 view .LVU104
+ 427 0002 FFF7FEFF 		bl	init_gpio
+ 428              	.LVL5:
+  99:main.c        ****     init_exti();
+ 429              		.loc 1 99 5 view .LVU105
+ 430 0006 FFF7FEFF 		bl	init_exti
+ 431              	.LVL6:
+ 100:main.c        **** 
+ 101:main.c        ****     // Keep track of whether the button is pressed.
+ 102:main.c        ****     uint8_t button_down = 0;
+ 432              		.loc 1 102 5 view .LVU106
+ 433              		.loc 1 102 5 is_stmt 0 view .LVU107
+ 434 000a 06E0     		b	.L21
+ 435              	.LVL7:
+ 436              	.L20:
+ 437              	.LBB14:
+ 103:main.c        ****     // GPIOA->BRR = 1 << (5);
+ 104:main.c        ****     // GPIOB->BRR = 1 << (USER_LED_INDEX);
+ 105:main.c        **** 
+ 106:main.c        ****     for (;;)
+ 107:main.c        ****     {
+ 108:main.c        ****         for (uint32_t i = 0; i < toggle; ++i)
+ 109:main.c        ****         {
+ 110:main.c        ****             __asm__ volatile("nop");
+ 438              		.loc 1 110 13 is_stmt 1 discriminator 3 view .LVU108
+ 439              		.syntax divided
+ 440              	@ 110 "main.c" 1
+ 441 000c C046     		nop
+ 442              	@ 0 "" 2
+ 108:main.c        ****         {
+ 443              		.loc 1 108 42 discriminator 3 view .LVU109
+ 444              		.thumb
+ 445              		.syntax unified
+ 446 000e 0133     		adds	r3, r3, #1
+ 447              	.LVL8:
+ 448              	.L19:
+ 108:main.c        ****         {
+ 449              		.loc 1 108 30 discriminator 1 view .LVU110
+ 108:main.c        ****         {
+ 450              		.loc 1 108 9 is_stmt 0 discriminator 1 view .LVU111
+ 451 0010 034A     		ldr	r2, .L22
+ 452 0012 9342     		cmp	r3, r2
+ 453 0014 FAD9     		bls	.L20
+ 454              	.LBE14:
+ 111:main.c        ****         }
+ 112:main.c        ****         toggle_led();
+ 455              		.loc 1 112 9 is_stmt 1 view .LVU112
+ 456 0016 FFF7FEFF 		bl	toggle_led
+ 457              	.LVL9:
+ 106:main.c        ****     {
+ 458              		.loc 1 106 11 view .LVU113
+ 459              	.L21:
+ 106:main.c        ****     {
+ARM GAS  /tmp/ccOLnb8w.s 			page 16
+
+
+ 460              		.loc 1 106 5 view .LVU114
+ 108:main.c        ****         {
+ 461              		.loc 1 108 9 view .LVU115
+ 462              	.LBB15:
+ 108:main.c        ****         {
+ 463              		.loc 1 108 14 view .LVU116
+ 108:main.c        ****         {
+ 464              		.loc 1 108 23 is_stmt 0 view .LVU117
+ 465 001a 0023     		movs	r3, #0
+ 108:main.c        ****         {
+ 466              		.loc 1 108 9 view .LVU118
+ 467 001c F8E7     		b	.L19
+ 468              	.L23:
+ 469 001e C046     		.align	2
+ 470              	.L22:
+ 471 0020 3F9C0000 		.word	39999
+ 472              	.LBE15:
+ 473              		.cfi_endproc
+ 474              	.LFE7:
+ 476              		.section	.data.x.4301,"aw"
+ 477              		.align	2
+ 478              		.set	.LANCHOR0,. + 0
+ 481              	x.4301:
+ 482 0000 01000000 		.word	1
+ 483              		.text
+ 484              	.Letext0:
+ 485              		.file 3 "/usr/lib/gcc/arm-none-eabi/9.2.1/include/stdint.h"
+ARM GAS  /tmp/ccOLnb8w.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccOLnb8w.s:16     .text.init_gpio:0000000000000000 $t
+     /tmp/ccOLnb8w.s:24     .text.init_gpio:0000000000000000 init_gpio
+     /tmp/ccOLnb8w.s:148    .text.init_gpio:0000000000000078 $d
+     /tmp/ccOLnb8w.s:156    .text.init_exti:0000000000000000 $t
+     /tmp/ccOLnb8w.s:163    .text.init_exti:0000000000000000 init_exti
+     /tmp/ccOLnb8w.s:255    .text.init_exti:0000000000000050 $d
+     /tmp/ccOLnb8w.s:264    .text.SystemInit:0000000000000000 $t
+     /tmp/ccOLnb8w.s:271    .text.SystemInit:0000000000000000 SystemInit
+     /tmp/ccOLnb8w.s:285    .text.toggle_led:0000000000000000 $t
+     /tmp/ccOLnb8w.s:292    .text.toggle_led:0000000000000000 toggle_led
+     /tmp/ccOLnb8w.s:349    .text.toggle_led:0000000000000034 $d
+     /tmp/ccOLnb8w.s:355    .text.EXTI4_15_IRQHandler:0000000000000000 $t
+     /tmp/ccOLnb8w.s:362    .text.EXTI4_15_IRQHandler:0000000000000000 EXTI4_15_IRQHandler
+     /tmp/ccOLnb8w.s:402    .text.EXTI4_15_IRQHandler:0000000000000020 $d
+     /tmp/ccOLnb8w.s:407    .text.main:0000000000000000 $t
+     /tmp/ccOLnb8w.s:414    .text.main:0000000000000000 main
+     /tmp/ccOLnb8w.s:471    .text.main:0000000000000020 $d
+     /tmp/ccOLnb8w.s:477    .data.x.4301:0000000000000000 $d
+     /tmp/ccOLnb8w.s:481    .data.x.4301:0000000000000000 x.4301
+
+NO UNDEFINED SYMBOLS

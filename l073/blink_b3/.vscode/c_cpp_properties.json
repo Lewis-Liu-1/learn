@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "STM32",
+      "includePath": [],
+      "defines": [
+        "STM32F072xB",
+        "USE_HAL_DRIVER"
+      ],
+      "compilerPath": "/usr/bin/arm-none-eabi-gcc"
+    }
+  ],
+  "version": 4
+}

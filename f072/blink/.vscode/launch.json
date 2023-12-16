@@ -1,0 +1,36 @@
+{
+    "configurations": [
+        {
+            "showDevDebugOutput": "parsed",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/mxf072.elf",
+            "name": "Debug STM32",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "preLaunchTask": "Build STM",
+            "gdbpath" : "/usr/bin/arm-none-eabi-gdb",
+            "device": "stm32f072",
+            "runToMain": true,
+            "configFiles": [
+                "openocd.cfg"
+            ],
+           /*"svdFile": "STM32L4x3.svd"*/
+        },
+        {
+            "showDevDebugOutput": "parsed",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/mystm32.elf",
+            "name": "Attach STM32",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "preLaunchTask": "Build STM",
+            "device": "stm32l443",
+            "configFiles": [
+                "openocd.cfg"
+            ],
+            "svdFile": "STM32L4x3.svd"
+        }
+    ]
+}
