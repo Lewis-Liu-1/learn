@@ -17,25 +17,35 @@ void init_gpio()
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
 
+#define LED_PIN 5
     // on board led
+    GPIOA->BSRR = 1 << (5);
+
     //  Configure GPIO A pin 5 as output.//PA5
-    GPIOA->MODER = 1 << (5 * 2);   // OUTPUT
-    GPIOA->OTYPER = 0 << (5);      // PUSH PULL, only used in OUTPUT mode
-    GPIOA->OSPEEDR = 0 << (5 * 2); // LOW SPEED, only used in OUTPUT mode
-    GPIOA->ODR = 1 << (5);         // OUTPUT HIGH
+    GPIOA->OSPEEDR &= ~(0x3 << (LED_PIN * 2)); // LOW SPEED, only used in OUTPUT mode
+    GPIOA->OTYPER &= ~(0x1 << LED_PIN);  // PUSH PULL, only used in OUTPUT mode
+
+    GPIOA->PUPDR &= ~(0x3 << (LED_PIN * 2)); // OUTPUT
+    GPIOA->PUPDR = 0 << (LED_PIN);
+
+    GPIOA->MODER &= ~(0x3 << (LED_PIN * 2)); // OUTPUT
+    GPIOA->MODER |= 1 << (LED_PIN * 2);            // OUTPUT
 
     // external my led
-    //  Configure GPIO B pin 3 as output.
-    GPIOB->MODER = 1 << (USER_LED_INDEX * 2);   // OUTPUT
-    GPIOB->OTYPER = 0 << (USER_LED_INDEX);      // PUSH PULL
-    GPIOB->OSPEEDR = 0 << (USER_LED_INDEX * 2); // LOW SPEED
-    GPIOB->ODR = 1 << (USER_LED_INDEX);         // OUTPUT HIGH
+    //  Configure GPIO B pin 3 as output. GPIOB USER_LED_INDEX
+    GPIOB->OSPEEDR &= ~(0x3 << (USER_LED_INDEX * 2)); // LOW SPEED, only used in OUTPUT mode
+    GPIOB->OTYPER &= ~(0x1 << USER_LED_INDEX);  // PUSH PULL, only used in OUTPUT mode
+
+    GPIOB->PUPDR &= ~(0x3 << (USER_LED_INDEX * 2)); // OUTPUT
+    GPIOB->PUPDR = 0 << (USER_LED_INDEX);
+
+    GPIOB->MODER &= ~(0x3 << (USER_LED_INDEX * 2)); // OUTPUT
+    GPIOB->MODER |= 1 << (USER_LED_INDEX * 2);            // OUTPUT
 
     // B1 should be set to 'input' mode with pull-up. //PC13
     GPIOC->MODER &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
     GPIOC->PUPDR &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
     GPIOC->PUPDR |= (0x1 << (BUTTON_PIN_INDEX * 2));
-    GPIOC->MODER = 0 << (BUTTON_PIN_INDEX * 2);
 }
 
 void init_exti()
@@ -56,7 +66,7 @@ void init_exti()
 
     /* EXTI interrupt init*/
     NVIC_SetPriority(EXTI4_15_IRQn, 0x03);
-    //NVIC_EnableIRQ(EXTI4_15_IRQn);
+    NVIC_EnableIRQ(EXTI4_15_IRQn);
 }
 
 void SystemInit(void)
@@ -96,6 +106,8 @@ int main(void)
 {
     int toggle = 40000;
 
+    __HAL_RCC_SYSCFG_CLK_ENABLE();
+    __HAL_RCC_PWR_CLK_ENABLE();
     init_gpio();
     init_exti();
 
