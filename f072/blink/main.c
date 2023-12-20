@@ -23,29 +23,36 @@ void init_gpio()
 
     //  Configure GPIO A pin 5 as output.//PA5
     GPIOA->OSPEEDR &= ~(0x3 << (LED_PIN * 2)); // LOW SPEED, only used in OUTPUT mode
-    GPIOA->OTYPER &= ~(0x1 << LED_PIN);  // PUSH PULL, only used in OUTPUT mode
+    GPIOA->OTYPER &= ~(0x1 << LED_PIN);        // PUSH PULL, only used in OUTPUT mode
 
     GPIOA->PUPDR &= ~(0x3 << (LED_PIN * 2)); // OUTPUT
     GPIOA->PUPDR = 0 << (LED_PIN);
 
     GPIOA->MODER &= ~(0x3 << (LED_PIN * 2)); // OUTPUT
-    GPIOA->MODER |= 1 << (LED_PIN * 2);            // OUTPUT
+    GPIOA->MODER |= 1 << (LED_PIN * 2);      // OUTPUT
 
     // external my led
     //  Configure GPIO B pin 3 as output. GPIOB USER_LED_INDEX
     GPIOB->OSPEEDR &= ~(0x3 << (USER_LED_INDEX * 2)); // LOW SPEED, only used in OUTPUT mode
-    GPIOB->OTYPER &= ~(0x1 << USER_LED_INDEX);  // PUSH PULL, only used in OUTPUT mode
+    GPIOB->OTYPER &= ~(0x1 << USER_LED_INDEX);        // PUSH PULL, only used in OUTPUT mode
 
     GPIOB->PUPDR &= ~(0x3 << (USER_LED_INDEX * 2)); // OUTPUT
     GPIOB->PUPDR = 0 << (USER_LED_INDEX);
 
     GPIOB->MODER &= ~(0x3 << (USER_LED_INDEX * 2)); // OUTPUT
-    GPIOB->MODER |= 1 << (USER_LED_INDEX * 2);            // OUTPUT
+    GPIOB->MODER |= 1 << (USER_LED_INDEX * 2);      // OUTPUT
 
     // B1 should be set to 'input' mode with pull-up. //PC13
     GPIOC->MODER &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
     GPIOC->PUPDR &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
     GPIOC->PUPDR |= (0x1 << (BUTTON_PIN_INDEX * 2));
+
+    GPIOC->MODER &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
+    GPIOC->PUPDR &= ~(0x3 << (BUTTON_PIN_INDEX * 2));
+    GPIOC->PUPDR |= (0x1 << (BUTTON_PIN_INDEX * 2));
+    // GPIOC->MODER  &= ~(0x3 << (ROTARY_PIN_B*2));
+    // GPIOC->PUPDR  &= ~(0x3 << (ROTARY_PIN_B*2));
+    // GPIOC->PUPDR |= (0x1 << (ROTARY_PIN_B * 2));
 }
 
 void init_exti()
@@ -75,7 +82,7 @@ void SystemInit(void)
 
 void EXTI4_15_IRQHandler(void)
 {
-    if (EXTI->PR & (1 << BUTTON_PIN_INDEX) == (1 << BUTTON_PIN_INDEX))
+    if (EXTI->PR & (1 << BUTTON_PIN_INDEX))
     {
         // Clear the EXTI status flag.
         EXTI->PR |= (1 << BUTTON_PIN_INDEX);
@@ -118,11 +125,11 @@ int main(void)
 
     for (;;)
     {
-        for (uint32_t i = 0; i < toggle; ++i)
+        // for (uint32_t i = 0; i < toggle; ++i)
         {
             __asm__ volatile("nop");
         }
-        toggle_led();
+        // toggle_led();
 #if 0
         uint32_t idr_val = (GPIOC->IDR);
         if (idr_val & (1 << BUTTON_PIN_INDEX))
