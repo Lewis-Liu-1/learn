@@ -1,6 +1,4 @@
 {
-    "cortex-debug.armToolchainPath": "/usr/bin",
-    "cortex-debug.openocdPath": "/usr/bin/openocd",
-    "debugServerArgs": "-f interface/stlink-v2.cfg -f target/stm32l0.cfg",
-    "cortex-debug.armToolchainPath": "/usr/bin"
+    "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+    "cortex-debug.openocdPath": "/usr/local/bin/openocd"
 }

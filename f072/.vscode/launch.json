@@ -6,7 +6,7 @@
     "configurations": [
         {
             "cwd": "${workspaceRoot}",
-            "executable": "./build/mxf072.elf",
+            "executable": "./blink/build/mxf072.elf",
             "name": "Debug with OpenOCD",
             "request": "launch",
             "type": "cortex-debug",

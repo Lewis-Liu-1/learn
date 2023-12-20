@@ -1,36 +1,24 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
     "configurations": [
         {
-            "showDevDebugOutput": "parsed",
             "cwd": "${workspaceRoot}",
             "executable": "./build/mxf072.elf",
-            "name": "Debug STM32",
+            "name": "Debug with OpenOCD",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",
-            "preLaunchTask": "Build STM",
-            "device": "stm32f072",
-            "runToMain": true,
-            
             "configFiles": [
-                "openocd.cfg"
+                "/usr/local/share/openocd/scripts/interface/stlink.cfg",
+                "/usr/local/share/openocd/scripts/target/stm32f0x.cfg"
             ],
-           /*"svdFile": "STM32L4x3.svd"*/
-        },
-        {
-            "showDevDebugOutput": "parsed",
-            "cwd": "${workspaceRoot}",
-            "executable": "./build/mystm32.elf",
-            "name": "Attach STM32",
-            "request": "attach",
-            "type": "cortex-debug",
-            "servertype": "openocd",
-            "preLaunchTask": "Build STM",
-            "device": "stm32l443",
-            "configFiles": [
-                "openocd.cfg"
-            ],
-            "svdFile": "STM32L4x3.svd"
+            "searchDir": [],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none"
         }
+  
     ]
 }
